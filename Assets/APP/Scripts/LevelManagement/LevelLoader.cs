@@ -1,21 +1,7 @@
 using System;
 using UnityEngine;
 using System.IO;
-using System.Collections.Generic;
 using Newtonsoft.Json;
-
-
-[Serializable]
-public class LevelData
-{
-    public List<List<int>> grid { get; set; }
-
-    internal void PrintData()
-    {
-        Debug.Log($"{this.grid.ToString()}");
-    }
-}
-
 
 public class LevelLoader : MonoBehaviour
 {
@@ -37,7 +23,7 @@ public class LevelLoader : MonoBehaviour
         }
         catch(Exception ex)
         {
-            Debug.LogError($"Exception occured while decoding : {ex }");
+            Debug.LogError($"Exception occured while decoding : {ex}");
         }
 
         Debug.Log($"Loaded from file : {levelFilePath}");
