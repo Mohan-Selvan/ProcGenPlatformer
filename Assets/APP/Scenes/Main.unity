@@ -270,8 +270,9 @@ GameObject:
   - component: {fileID: 96802056}
   - component: {fileID: 96802058}
   - component: {fileID: 96802057}
+  - component: {fileID: 96802059}
   m_Layer: 0
-  m_Name: LevelManager
+  m_Name: GameManager
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -317,7 +318,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6b30cb8c63115674bac82f1d4d94976a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  levelLoader: {fileID: 96802057}
+  levelsDataLoader: {fileID: 96802059}
   playerCamera: {fileID: 26837674}
   playerPrefab: {fileID: 3686303688860559639, guid: 83dc53303af087a40ad542f736ae7054, type: 3}
   tileMap: {fileID: 128875322}
@@ -327,10 +328,20 @@ MonoBehaviour:
   startGameKey: 112
   emptySpaceTile: {fileID: 0}
   platformTile: {fileID: 11400000, guid: 7337409ee6af56942acb63ffb8ce4b0a, type: 2}
-  levelData:
-    GridSize: {x: 0, y: 0}
-    PlayerPath: []
   playerController: {fileID: 0}
+--- !u!114 &96802059
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 96802055}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: dd987600b491d84439920e101b8afba7, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  levelsFilePath: N:\UnityRepositories\Personal\PlatformerDemo\Assets\APP\Data\results.json
 --- !u!1 &128875319
 GameObject:
   m_ObjectHideFlags: 0

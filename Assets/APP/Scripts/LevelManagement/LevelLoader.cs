@@ -8,18 +8,17 @@ public class LevelLoader : MonoBehaviour
     [Header("Settings")]
     [SerializeField] string levelFilePath = string.Empty;
 
-
-    internal LevelData LoadLevelFromJson()
+    internal EnvData LoadLevelFromJson()
     {
         Debug.Log($"Loading from file : {levelFilePath}");
 
-        LevelData levelData = null;
+        EnvData levelData = null;
 
         try
         {
             string content = ReadstringFromFile(levelFilePath);
             print(content);
-            levelData = JsonConvert.DeserializeObject<LevelData>(content);
+            levelData = JsonConvert.DeserializeObject<EnvData>(content);
         }
         catch(Exception ex)
         {
