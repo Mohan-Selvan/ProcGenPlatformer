@@ -11,12 +11,14 @@ public class UIManager : MonoBehaviour
 
     [Header("References - UI")]
     [SerializeField] private GameObject gameplayUIWindow = null;
-    [SerializeField] private Button exitButton = null;
+    [SerializeField] private Button button_Exit = null;
 
     [Space(5)]
     [SerializeField] private GameObject levelSelectionWindow = null;
     [SerializeField] private TMP_Text levelDetailsText = null;
-    [SerializeField] private Button playButton = null;
+    [SerializeField] private Button button_SwitchLevelPrev = null;
+    [SerializeField] private Button button_SwitchLevelNext = null;
+    [SerializeField] private Button button_Play = null;
 
     private void Start()
     {
@@ -24,14 +26,24 @@ public class UIManager : MonoBehaviour
         gameManager.OnPlayerSpawned += GameManager_OnPlayerSpawned;
         gameManager.OnPlayerDespawned += GameManager_OnPlayerDespawned;
 
-        playButton.onClick.AddListener(() =>
+        button_Play.onClick.AddListener(() =>
         {
             gameManager.PlayActiveLevel();
         });
 
-        exitButton.onClick.AddListener(() =>
+        button_Exit.onClick.AddListener(() =>
         {
             gameManager.ExitActiveLevel();
+        });
+
+        button_SwitchLevelPrev.onClick.AddListener(() =>
+        {
+            gameManager.SwitchLevelPrevious();
+        });
+
+        button_SwitchLevelNext.onClick.AddListener(() =>
+        {
+            gameManager.SwitchLevelNext();
         });
 
         gameplayUIWindow.SetActive(false);
@@ -65,15 +77,14 @@ public class UIManager : MonoBehaviour
     {
         if(data == null)
         {
-            playButton.interactable = false;
+            button_Play.interactable = false;
             levelDetailsText.text = $"Sorry! There was an issue, Please reach out to '{Constants.SUPPORT_MAIL_ID}'";
             return;
         }
 
-        levelDetailsText.text = $"LEVEL DETAILS" +
-            $"\nLevel ID : {data.PathId}" +
+        levelDetailsText.text = $"\nLevel ID : {data.PathId}" +
             $"\nIs Solvable : {data.EnvData.IsSolvable}";
 
-        playButton.interactable = data.EnvData.IsSolvable;
+        button_Play.interactable = data.EnvData.IsSolvable;
     }
 }

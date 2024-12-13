@@ -99,12 +99,12 @@ public class GameManager : MonoBehaviour
 
         if (Input.GetKeyDown(previousLevelKey))
         {
-            SetActiveLevel(currentLevelIndex - 1);
+            SwitchLevelPrevious();
         }
 
         if (Input.GetKeyDown(nextLevelKey))
         {
-            SetActiveLevel(currentLevelIndex + 1);
+            SwitchLevelNext();
         }
 
         //Camera controls
@@ -181,6 +181,16 @@ public class GameManager : MonoBehaviour
         yield return null;
 
         Debug.Log($"Stop Routine : {nameof(PlayActiveLevel_Routine)}");
+    }
+
+    public void SwitchLevelPrevious()
+    {
+        SetActiveLevel(currentLevelIndex - 1);
+    }
+
+    public void SwitchLevelNext()
+    {
+        SetActiveLevel(currentLevelIndex + 1);
     }
 
     private void SetActiveLevel(int index)
