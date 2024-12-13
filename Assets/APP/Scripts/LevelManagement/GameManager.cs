@@ -3,6 +3,7 @@ using UnityEngine;
 using UnityEngine.Tilemaps;
 using Unity.Cinemachine;
 using System.Collections;
+using TMPro;
 
 public class GameManager : MonoBehaviour
 {
@@ -37,7 +38,6 @@ public class GameManager : MonoBehaviour
     [Header("Settings - Debug only")]
     [SerializeField] LevelsData levelsData = null;
 
-
     [Space(10)]
     [SerializeField] int currentLevelIndex = 0;
     [SerializeField] LevelData activeLevel = null;
@@ -46,6 +46,11 @@ public class GameManager : MonoBehaviour
     [SerializeField] List<GameObject> coinsList = new List<GameObject>();
 
     private Coroutine _activeRoutine = null;
+
+    //Events
+    public event System.Action<LevelData> OnActiveLevelChanged = null;
+    public event System.Action OnPlayerSpawned = null;
+    public event System.Action OnPlayerDespawned = null;
 
     private void Start()
     {
@@ -83,38 +88,23 @@ public class GameManager : MonoBehaviour
         {
             Debug.Log("Loading levels data");
             levelsData = levelsDataLoader.LoadLevelFromJson();
-            currentLevelIndex = 0;
-            activeLevel = levelsData.Levels[currentLevelIndex];
+            SetActiveLevel(0);
             Debug.Log("Loaded levels data");
         }
 
         if (Input.GetKeyDown(startGameKey))
         {
-            RestartActiveLevel();
+            PlayActiveLevel();
         }
 
         if (Input.GetKeyDown(previousLevelKey))
         {
-            currentLevelIndex--;
-            if(currentLevelIndex < 0)
-            {
-                currentLevelIndex = levelsData.Levels.Count - 1;
-            }
-
-            activeLevel = levelsData.Levels[currentLevelIndex];
-            RestartActiveLevel();
+            SetActiveLevel(currentLevelIndex - 1);
         }
 
         if (Input.GetKeyDown(nextLevelKey))
         {
-            currentLevelIndex++;
-            if (currentLevelIndex >= levelsData.Levels.Count)
-            {
-                currentLevelIndex = 0;
-            }
-
-            activeLevel = levelsData.Levels[currentLevelIndex];
-            RestartActiveLevel();
+            SetActiveLevel(currentLevelIndex + 1);
         }
 
         //Camera controls
@@ -130,11 +120,19 @@ public class GameManager : MonoBehaviour
         }
     }
 
-    private void RestartActiveLevel()
+    public void PlayActiveLevel()
     {
         if(CanRunRoutine())
         {
-            _activeRoutine = StartCoroutine(RestartActiveLevel_Routine());
+            if(activeLevel.EnvData.IsSolvable)
+            {
+                _activeRoutine = StartCoroutine(PlayActiveLevel_Routine());
+            }
+            else
+            {
+                Debug.Log($"Level : {activeLevel.PathId} cannot be played.");
+            }
+
         }
         else
         {
@@ -142,13 +140,27 @@ public class GameManager : MonoBehaviour
         }
     }
 
-    private IEnumerator RestartActiveLevel_Routine()
+    public void ExitActiveLevel()
     {
-        Debug.Log($"Start Routine : {nameof(RestartActiveLevel_Routine)}");
+        if (CanRunRoutine())
+        {
+            _activeRoutine = StartCoroutine(HandleLevelEnd_Routine());
+        }
+        else
+        {
+            Debug.Log($"Routine cannot run, blocked by : {_activeRoutine}");
+        }
+    }
+
+    private IEnumerator PlayActiveLevel_Routine()
+    {
+        Debug.Log($"Start Routine : {nameof(PlayActiveLevel_Routine)}");
 
         Debug.Log($"Starting Level : {activeLevel.PathId}, " +
         $"Path complexity : {activeLevel.PathData.Complexity}, " +
         $"IsSolvable : {activeLevel.EnvData.IsSolvable}");
+
+        OnPlayerSpawned?.Invoke();
 
         DrawLevel(activeLevel.EnvData);
 
@@ -156,6 +168,8 @@ public class GameManager : MonoBehaviour
 
         Debug.Log("Spawning player..");
         playerCamera.Target.TrackingTarget = spawnPoint.transform;
+        playerCamera.Prioritize();
+
         yield return spawnPoint.SpawnPlayer_Routine(() =>
         {
             playerCamera.Target.TrackingTarget = playerManager.transform;
@@ -166,7 +180,27 @@ public class GameManager : MonoBehaviour
         _activeRoutine = null;
         yield return null;
 
-        Debug.Log($"Stop Routine : {nameof(RestartActiveLevel_Routine)}");
+        Debug.Log($"Stop Routine : {nameof(PlayActiveLevel_Routine)}");
+    }
+
+    private void SetActiveLevel(int index)
+    {
+        if(index >= (levelsData.Levels.Count))
+        {
+            index = 0;
+        }
+        else if(index < 0)
+        {
+            index = levelsData.Levels.Count - 1;
+        }
+
+        currentLevelIndex = index;
+        activeLevel = levelsData.Levels[currentLevelIndex];
+
+        DrawLevel(activeLevel.EnvData);
+        playerCamera.Target.TrackingTarget = spawnPoint.transform;
+
+        OnActiveLevelChanged?.Invoke(activeLevel);
     }
 
     private void DrawLevel(EnvData data)
@@ -258,6 +292,8 @@ public class GameManager : MonoBehaviour
         {
             this.playerManager.Deinitialize();
         });
+
+        OnPlayerDespawned?.Invoke();
 
         _activeRoutine = null;
     }
