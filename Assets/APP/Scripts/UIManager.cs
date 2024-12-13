@@ -82,7 +82,7 @@ public class UIManager : MonoBehaviour
             return;
         }
 
-        levelDetailsText.text = $"\nLevel ID : {data.PathId}" +
+        levelDetailsText.text = $"Level ID : {data.PathId}" +
             $"\nIs Solvable : {data.EnvData.IsSolvable}";
 
         button_Play.interactable = data.EnvData.IsSolvable;

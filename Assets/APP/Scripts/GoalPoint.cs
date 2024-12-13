@@ -33,7 +33,7 @@ public class GoalPoint : MonoBehaviour
 
     internal IEnumerator ReceivePlayer_Routine(System.Action playerReachGoalCallback)
     {
-        burstParticles.Play();
+        //burstParticles.Play();
 
         spriteRenderer.color = Helper.GetColorWithAlpha(spriteRenderer.color, 1.0f);
         playerReachGoalCallback?.Invoke();
