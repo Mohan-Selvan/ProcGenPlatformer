@@ -77,7 +77,7 @@ SpriteRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_Sprite: {fileID: 21300000, guid: f7845493ed6d8ce4292d311bfcf20f75, type: 3}
-  m_Color: {r: 1, g: 0.88235295, b: 0.44313726, a: 1}
+  m_Color: {r: 0.6630322, g: 1, b: 0.4431373, a: 1}
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0
@@ -96,13 +96,14 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 3950161612462125878}
+  - component: {fileID: 105180087177287968}
   - component: {fileID: 3686303688860559639}
   - component: {fileID: 3211006290610464337}
   - component: {fileID: 1960349588474899376}
   - component: {fileID: 5813743236802271451}
   m_Layer: 0
   m_Name: Player
-  m_TagString: Untagged
+  m_TagString: Player
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -123,6 +124,20 @@ Transform:
   - {fileID: 8356347566525971635}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &105180087177287968
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8538875445033744225}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 418bc9a51b1e65b4292ec25387e89afc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  playerController: {fileID: 3686303688860559639}
+  coinsCollected: 0
 --- !u!114 &3686303688860559639
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -136,11 +151,15 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   rb: {fileID: 3211006290610464337}
-  playerCollider: {fileID: 1960349588474899376}
+  spriteRenderer: {fileID: 348682690712807663}
+  playerColliders:
+  - {fileID: 1960349588474899376}
+  - {fileID: 5813743236802271451}
   gravityY: -19.62
   maxSpeed: 100
   maxAcceleration: 100
-  jumpHeight: 3.35
+  jumpHeight: 1.675
+  maxJumpCount: 1
   maxGroundAngleInDegrees: 45
   movementAxis: {x: 0, y: 0}
   velocity: {x: 0, y: 0}
@@ -148,6 +167,8 @@ MonoBehaviour:
   isJumpDesired: 0
   maxGroundDot: 0.009168598
   groundContactCount: 0
+  jumpsLeft: 0
+  _isInitialized: 0
 --- !u!50 &3211006290610464337
 Rigidbody2D:
   serializedVersion: 5
