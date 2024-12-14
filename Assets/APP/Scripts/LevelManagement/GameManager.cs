@@ -263,12 +263,11 @@ public class GameManager : MonoBehaviour
         System.Collections.Generic.List<int> randomIndices = new List<int>();
         while(randomIndices.Count < numberOfCoins)
         {
-            int index = Random.Range(0, data.ReachableCells.Count - 1);
+            int index = Random.Range(0, data.ReachableCells.Count);
             if (!randomIndices.Contains(index))
             {
                 randomIndices.Add(index);
             }
-
         }
 
         for (int i = 0; i < coinsList.Count; i++)
